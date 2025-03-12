@@ -3,3 +3,7 @@
     background-repeat: repeat;
     background-size: 120px;
 }
+
+#Video{
+    display: inline-flex;
+}
