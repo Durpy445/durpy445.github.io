@@ -15,12 +15,7 @@ Pictures = ["Images/ReiPlush.jpg",
 "Images/Teto.webp",
 "Images/Teto_Kasane_illustration.png",
 "Images/hqdefault.jpg",
-"Images/1767ad00940e5e54ff41cd1fd22d483339f015b1.jpg",
-
-
-
-
-]
+"Images/1767ad00940e5e54ff41cd1fd22d483339f015b1.jpg",]
 
 function shuffle(array) {
     let currentIndex = array.length;
