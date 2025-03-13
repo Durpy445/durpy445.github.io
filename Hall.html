@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="Styles.css">
+
+
+
+<html style="background-color: #ff0000;" id = "Div">
+    
+    
+   
+      
+    
+    
+
+</html>
+
+
+<script>
+    
+    Pictures =  ["HallImages/003968dd-000d-4845-a4a3-ced344dcf535.jpg","HallImages/155px-Teto_Kasane_illustration.png","HallImages/20240821_141413.jpg","HallImages/20240821_195500.jpg","HallImages/20240824_131713.jpg","HallImages/20240824_131721.jpg","HallImages/20240825_134955.jpg","HallImages/20240826_044314.jpg","HallImages/20240826_044543.jpg","HallImages/20240827_031554.jpg","HallImages/20240827_170116.jpg","HallImages/20240828_035540.jpg","HallImages/20240829_135134.jpg","HallImages/20240829_182706.jpg","HallImages/20240902_035944.jpg","HallImages/20240903_075057.jpg","HallImages/20240903_075832.jpg","HallImages/20240903_224821.jpg","HallImages/20240904_073720.jpg","HallImages/20240905_210127.jpg","HallImages/20240910_160903.jpg","HallImages/20240910_161552.jpg","HallImages/20240911_152738.jpg","HallImages/20240926_073328.jpg","HallImages/20240926_161217.jpg","HallImages/20241002_230505.jpg","HallImages/20241020_185225.jpg","HallImages/20241105_165843.jpg","HallImages/20241112_074912.jpg","HallImages/20241209_003415.jpg","HallImages/20241223_175117.jpg","HallImages/751c007835ef0442f8e21a579edf1f0e.jpg","HallImages/ff17acf3aa12ad97bde3a74c8c7a0e52.jpg","HallImages/Kasane_Pearto_Original.webp","HallImages/Tasateko.webp"]
+       function shuffle(array) {
+            let currentIndex = array.length;
+        
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+        
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+        
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+        }
+
+        shuffle(Pictures)
+
+        AddPicture = function(Ref,Main) {
+            let Image = document.createElement("img")
+            Image.src = Ref   
+            Image.style.outline = "solid"
+            Image.style.outlineColor = "gold"
+            Image.style.outlineWidth = "10px" 
+            Image.style.width = "50%"
+            
+            
+        
+
+            Main.append(Image);
+        }
+
+    Div = document.getElementById("Div")
+
+    for(var i = 0;i < Pictures.length;i++ ){
+        AddPicture(Pictures[i],Div)
+    }
+
+</script>

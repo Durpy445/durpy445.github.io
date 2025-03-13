@@ -56,6 +56,14 @@ Flash = function(){
     Flashing.src =  Pictures[Cycle1 % Pictures.length] 
     Cycle1 += 1
 }
+ 
+
+AddPicture = function(Ref,Main) {
+  let Image = document.createElement("img")
+  Image.src = Ref
+
+  Main.append(Image);
+}
 
 
 setInterval(ChangeImage,500)
