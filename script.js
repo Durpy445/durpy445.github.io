@@ -15,7 +15,16 @@ Pictures = ["Images/ReiPlush.jpg",
 "Images/Teto.webp",
 "Images/Teto_Kasane_illustration.png",
 "Images/hqdefault.jpg",
-"Images/1767ad00940e5e54ff41cd1fd22d483339f015b1.jpg",]
+"Images/1767ad00940e5e54ff41cd1fd22d483339f015b1.jpg",
+"Images/716gByubJlL._AC_SL1500_.jpg",
+"Images/images.jpg",
+"Images/tumblr_inline_n6wjth2uIz1sf3h99.png",
+"Images/Untitled.jpg",
+"Images/which-chiquita-wins-the-cute-war-of-2024-v0-8rb7hkl381bc1.webp",
+"Images/1qtej0s1ojo71.webp",
+"Images/Whersyourheadatjpg.jpg",
+]
+
 
 function shuffle(array) {
     let currentIndex = array.length;
@@ -36,6 +45,7 @@ function shuffle(array) {
   shuffle(Pictures)
 
 Cycle = 0
+Cycle1 = 0
 
 ChangeImage = function(){
     Main.style.backgroundImage = "url("+ Pictures[Cycle % Pictures.length] +")"
@@ -43,8 +53,8 @@ ChangeImage = function(){
 }
 
 Flash = function(){
-    Flashing.src =  Pictures[Cycle % Pictures.length] 
-    Cycle += 1
+    Flashing.src =  Pictures[Cycle1 % Pictures.length] 
+    Cycle1 += 1
 }
 
 
