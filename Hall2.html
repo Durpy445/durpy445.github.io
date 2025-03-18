@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="Styles.css">
+
+
+
+<html style="background-color: #ae43ff;" id = "Div">
+    <audio autoplay loop>
+        <source src="BadApple.mp3" type="audio/mpeg">
+        Browser Doesnt support
+    </audio>
+   
+      
+    
+    
+
+</html>
+
+
+<script>
+    
+    Pictures =  ["Hall2/Fish.png","Hall2/Fish2.png","Hall2/image-8.png","Hall2/Miku2.png","Hall2/Point.png","Hall2/Sit.png","Hall2/Tax.png","Hall2/Tax2.png","Hall2/Tax3.png","Hall2/Tax4.png"]
+           function shuffle(array) {
+            let currentIndex = array.length;
+        
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+        
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+        
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+        }
+
+        shuffle(Pictures)
+
+        AddPicture = function(Ref,Main) {
+            let Image = document.createElement("img")
+            Image.src = Ref   
+            Image.style.outline = "solid"
+            Image.style.outlineColor = "Lime"
+            Image.style.outlineWidth = "5px" 
+            Image.style.height = "300px"
+            
+            
+        
+
+            Main.append(Image);
+        }
+
+    Div = document.getElementById("Div")
+
+    for(var i = 0;i < Pictures.length;i++ ){
+        AddPicture(Pictures[i],Div)
+    }
+
+</script>
