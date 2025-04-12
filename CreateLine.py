@@ -1,14 +1,14 @@
 import os
 
-dirs = os.listdir(os.getcwd() + "/Hall2")
+dirs = os.listdir(os.getcwd() + "/AppImages")
 
 string = "["
 
 for file in dirs:
-    string += "" + "\"Hall2/" + str(file) + "\","
+    string += "" + "\"AppImages/" + str(file) + "\","
 
 if string.endswith(","):
     string = string[:-1]
     string += "]"
 
-print("String = ", string)
+print("String = \n", string,"\n")

@@ -1,0 +1,54 @@
+<html style="background-color: black;">
+    <body>
+        <section style="height: 100%; position: relative; margin: auto;width: 50%;">
+            <img src="AppImages/Backgroynd.png" style=" height: 100%; object-fit: fill; position: absolute; top: 0; left: 0;">
+            <section id="body" style="position: relative; height: 100%;width: 100%;display: flex;flex-wrap:wrap;flex-direction: column;row-gap: 20px;column-gap: 0px;">
+              
+            </section>
+          </section>
+        
+
+        
+
+    </body>
+    <script>
+        Images = ["AppImages/Github.png","AppImages/Mapper.png","AppImages/Sans.png","AppImages/twitter.png"]
+        Links = ["https://github.com/Durpy445","https://github.com/Durpy445/Mapper","BadTime/index.html","https://x.com/Durpy444"]
+        Names = ["Github","Mapper","Sans Fight","Twitter"]
+
+        body = document.getElementById("body")
+
+        function AddApp(Num){
+            div = document.createElement("div")
+            div.style.height = "100px"
+            div.style.width = "80px"
+            div.style.color = "white"
+            div.display = "inline-block"
+            
+
+            link = document.createElement("a")
+            link.href = Links[Num]
+
+            img = document.createElement("img")
+            img.src = Images[Num]
+            img.style.height = "80px"
+            img.style.width = "80px"
+
+            link.append(img)
+            div.append(link)
+            div.innerHTML += Names[Num]
+
+            body.append(div)
+
+
+            
+        }
+
+        
+        for(var i = 0;i < Images.length;i++ ){
+            AddApp(i)
+        }   
+
+
+    </script>
+</html>
