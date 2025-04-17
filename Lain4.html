@@ -3,7 +3,7 @@
         <title>Lain</title>
         <link rel="icon" type="image/ico" href="/Lain3.ico">
     </head>
-    <body style="font-size:25.32px;background-color: blue;">
+    <body style="font-size:25.32px;background-color: blue;" id="Div">
         
 
         
@@ -11,7 +11,48 @@
             <source src="Duvet.mp3" type="audio/mpeg">
             Browser Doesnt support
         </audio>
-        <a href="Hub.html">Leave</a>
+        <a href="Hub.html" style="text-align: center;">Leave</a>
+        <p></p>
 
     </body>
 </html>
+
+<script>
+    
+    Pictures =   ["Image2/Boat.png","Image2/City.png","Image2/Connection.png","Image2/Flow.png","Image2/Forgotten.png","Image2/House.png","Image2/Office.png","Image2/SmallThings.png","Image2/Window.png"] 
+           function shuffle(array) {
+            let currentIndex = array.length;
+        
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+        
+            // Pick a remaining element...
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+        
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+        }
+
+       
+
+        AddPicture = function(Ref,Main) {
+            let Image = document.createElement("img")
+            Image.src = Ref   
+
+            
+            
+        
+
+            Main.append(Image);
+        }
+
+    Div = document.getElementById("Div")
+
+    for(var i = 0;i < Pictures.length;i++ ){
+        AddPicture(Pictures[i],Div)
+    }
+
+</script>

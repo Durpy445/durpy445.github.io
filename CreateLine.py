@@ -1,11 +1,11 @@
 import os
 
-dirs = os.listdir(os.getcwd() + "/AppImages")
+dirs = os.listdir(os.getcwd() + "/Image2")
 
 string = "["
 
 for file in dirs:
-    string += "" + "\"AppImages/" + str(file) + "\","
+    string += "" + "\"Image2/" + str(file) + "\","
 
 if string.endswith(","):
     string = string[:-1]
