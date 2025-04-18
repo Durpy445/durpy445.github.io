@@ -1,9 +1,10 @@
 <html>
+    <img src="Gallery.png" style=" width: 100%;height: 100%; object-fit: fill; position: absolute; top: 0; left: 0; z-index: -15;">
     <head>
         <title>Lain</title>
         <link rel="icon" type="image/ico" href="/Lain3.ico">
     </head>
-    <body style="font-size:25.32px;background-color: blue;" id="Div">
+    <body style="font-size:25.32px;background-color: rgb(255, 255, 255);" id="Div">
         
 
         
@@ -14,45 +15,44 @@
         <a href="Hub.html" style="text-align: center;">Leave</a>
         <p></p>
 
+        <img src="Back.png" alt="Back" id="Back" style="float: left;margin-top: 7%;">
+        <img src="Foward.png" alt="Forward" id="Forward" style="float: right;margin-top: 7%;">
+
+        <div style="height: 512px; width: 1024px; background-color:rgb(75, 42, 11);position: relative; margin: auto;margin-top: 7%;">
+            <img src="Frame.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;outline:solid;outline-color: gold;outline-width: 15px;"> 
+            <img src="Image2/Boat.png" alt="" style="width: 100%;height:100%;position:  absolute;margin:auto" id = "Picture">
+        </div>
+
+        
+        
+
     </body>
 </html>
 
 <script>
-    
-    Pictures =   ["Image2/Boat.png","Image2/City.png","Image2/Connection.png","Image2/Flow.png","Image2/Forgotten.png","Image2/House.png","Image2/Office.png","Image2/SmallThings.png","Image2/Window.png"] 
-           function shuffle(array) {
-            let currentIndex = array.length;
-        
-            // While there remain elements to shuffle...
-            while (currentIndex != 0) {
-        
-            // Pick a remaining element...
-            let randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-        
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [
-                array[randomIndex], array[currentIndex]];
-            }
-        }
+    Forward = document.getElementById("Forward")
+    Back = document.getElementById("Back")
+    Picture = document.getElementById("Picture")
+    Pictures =  ["Image2/Boat.png","Image2/Cat.png","Image2/City.png","Image2/Connection.png","Image2/Fishing.png","Image2/Floor.png","Image2/Flow.png","Image2/Forgotten.png","Image2/House.png","Image2/Light.png","Image2/Numbers.png","Image2/Office.png","Image2/SmallThings.png","Image2/Starry.png","Image2/Wall.png","Image2/Window.png"] 
+    Current = 0
 
-       
 
-        AddPicture = function(Ref,Main) {
-            let Image = document.createElement("img")
-            Image.src = Ref   
-
-            
-            
+    Forward.onclick = function(){
+        Current += 1
+        if (Current - 1 < 0){return null}
+        let Actual = Current % Pictures.length
         
 
-            Main.append(Image);
-        }
-
-    Div = document.getElementById("Div")
-
-    for(var i = 0;i < Pictures.length;i++ ){
-        AddPicture(Pictures[i],Div)
+        Data = Pictures[Actual]
+        Picture.src = Data 
     }
+    Back.onclick = function(){
+        if (Current - 1 < 0){return null}
+        Current += -1
+        let Actual = Current % Pictures.length
+        console.log(Actual)
 
+        Data = Pictures[Actual]
+        Picture.src = Data 
+    }
 </script>
