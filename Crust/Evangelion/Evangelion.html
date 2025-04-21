@@ -1,23 +1,24 @@
 
-<html style="background-image: url(200w.gif); background-size: 65%; background-color: rgb(36,76,140) ;background-repeat: no-repeat;background-position: center;image-rendering: pixelated;background-position-y: 0%;user-select: none">
+<html style="background-image: url(Background.gif); background-size: 65%; background-color: rgb(36,76,140) ;background-repeat: no-repeat;background-position: center;image-rendering: pixelated;background-position-y: 0%;user-select: none">
+    <title>Evangelion Instrumentality</title>
     <audio autoplay loop>
-        <source src="Komm.mp3" type="audio/mpeg">
+        <source src="../../Music/Komm.mp3" type="audio/mpeg">
         Browser Doesnt support
     </audio>
 
     <div style="display: flex; width: 15%; float: left; height: 600px;flex-direction: column;row-gap: 5px;">
         <div style="width: 100%;height: 100px;background-color: black;color: white;font-size: 40px;cursor:pointer;position: relative" id="Spear">
-            <img src="Clicker/Spear.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
+            <img src="Assets/Spear.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
             Spear|Own:0
             Cost:10
         </div>
         <div style="width: 100%;height: 100px;background-color: black;color: white;font-size: 40px;cursor:pointer;position: relative" id="Eva">
-            <img src="Clicker/Eva.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
+            <img src="Assets/Eva.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
             Eva|Own:0
             Cost:100
         </div>
         <div style="width: 100%;height: 100px;background-color: black;color: white;font-size: 40px;cursor:pointer;position: relative" id="Pillow">
-            <img src="Clicker/BodyPillow.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
+            <img src="Assets/BodyPillow.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> 
             Pillow|Own:0
             Cost:5000
         </div>
@@ -28,7 +29,7 @@
     </div>
 
     <div id="Soul" style="height: 512px;width: 512px;margin: auto;margin-top: 100px; cursor:pointer">
-        <img src="Clicker/Soul.png" alt="" style="height: 100%;width: 100%;">
+        <img src="Assets/Soul.png" alt="" style="height: 100%;width: 100%;">
     </div>
 </html>
 <script>
@@ -84,7 +85,7 @@
             SpearPrice += 15 + Spears * 15 + (2 ** Spears)
            
         
-            Spear.innerHTML = '<img src="Clicker/Spear.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Spear|Own:" .concat(Spears).concat(" Cost:").concat(SpearPrice) )
+            Spear.innerHTML = '<img src="Assets/Spear.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Spear|Own:" .concat(Spears).concat(" Cost:").concat(SpearPrice) )
         }
     }
 
@@ -95,7 +96,7 @@
             EvaPrice += 10  + Evas * 15 + (2 ** Evas / 2)
            
         
-            Eva.innerHTML = '<img src="Clicker/Eva.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Eva|Own:" .concat(Evas).concat(" Cost:").concat(EvaPrice) )
+            Eva.innerHTML = '<img src="Assets/Eva.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Eva|Own:" .concat(Evas).concat(" Cost:").concat(EvaPrice) )
         }
     }
 
@@ -106,7 +107,7 @@
             PillowPrice +=  5000 + 250 ** (Pillows + 1) 
            
         
-            Pillow.innerHTML = '<img src="Clicker/BodyPillow.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Pillow|Own:" .concat(Pillows).concat(" Cost:").concat(PillowPrice) )
+            Pillow.innerHTML = '<img src="Assets/BodyPillow.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;image-rendering: pixelated;"> '.concat( "Pillow|Own:" .concat(Pillows).concat(" Cost:").concat(PillowPrice) )
 
         }
     }

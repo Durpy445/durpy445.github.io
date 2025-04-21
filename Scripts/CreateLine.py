@@ -1,6 +1,6 @@
 import os
 
-dirs = os.listdir(os.getcwd() + "/Image2")
+dirs = os.listdir(os.getcwd() + "/")
 
 string = "["
 
