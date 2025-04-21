@@ -1,0 +1,13 @@
+.Card {
+    height: 300px;
+    width: 200px;
+    background-color: greenyellow;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.Container {
+    display: flex;
+    flex-direction: row;
+}
