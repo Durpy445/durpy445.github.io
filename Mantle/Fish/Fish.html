@@ -1,28 +1,35 @@
 <html>
     <body style="background-color: black;" id = "Body">
         <div style="height: 500px; width: 200px; background-color: black;outline-style: dashed;outline-color: white; position: absolute;bottom: 1;color: white;" id = "FishList">
-            FISH FISH FISH
+            FISH FISH FISH LOADING LOADING LOADING FISH FISH FISH
+        </div>
+
+        <div style="height: 40px; width: 400px; background-color: black;outline-style: dashed;outline-color: white; position: absolute;bottom: 1;color: white; right: 1;" id = "Output" >
+            Output
         </div>
         
     </body>
     <script>
-        const Ticks = 10
+        let Locked = false
+        const Ticks = 100
+        const MaxFish = 50
+        let TotalFish = 0
         let Score = 0
         FishList = document.getElementById("FishList")
         Body = document.getElementById("Body")
         let SpawnedFishes = [
-            //[Name,Element]
+            //[Name,Id,Element]
         ]
         let Fishes = [
-            //["FishName",Amount,Score,MinSize,MaxSize,Weight]
-            ["Fish",0,10,10,20,1],
-            ["Fish2",0,10,10,20,0.1]
+            //["FishName",Amount,Score,MinSize,MaxSize,Weight,TiedFunction]
+            ["Fish",0,10,10,20,1,function(){console.log("A") }],
+            ["Fish2",0,20,10,20,0.1]
         ]
         CompileFish = function(){
             FishList.innerHTML = "Score:".concat(Score.toString()).concat("<br>")
             for (let Num = 0;Num < Fishes.length;Num++){
                 if (Fishes[Num][1] > 0){
-                    FishList.innerHTML += Fishes[Num][0].concat("|Amount:").concat(Fishes[Num][1].toString())
+                    FishList.innerHTML += Fishes[Num][0].concat("|Amount:").concat(Fishes[Num][1].toString().concat("<br>"))
                 }
             }
         }
@@ -48,15 +55,26 @@
 
         FishNameToFish = function(Name){
             Fishes.forEach(Fish => {
-                if (Fish[0] == "Name"){
+                if (Fish[0] == Name){
                     return Fish
                 }
             });
             return null
         }
 
+        FishNameToFishNum = function(Name){
+            for (let Num = 0;Num < Fishes.length;Num++){
+                if (Fishes[Num][0] == Name){
+                    return Num
+                }
+            }
+            return null
+        }
+
         GetRandLocation = function(){
-            return [(Math.trunc(Math.random()* 100)).toString().concat("%"),((Math.trunc(Math.random()* 100)).toString().concat("%"))]
+            let X = Math.trunc(Math.random()* 100)
+            let Y = Math.trunc(Math.random()* 100)
+            return [(X).toString().concat("%"),((Y).toString().concat("%")),X,Y]
         }
 
         CreateElement = function(FishName,FishSize){
@@ -66,16 +84,27 @@
             Div.style.position = "absolute"
             Div.style.backgroundimage = "url(".concat( "FishImages/".concat(FishName)).concat()
             Div.style.zIndex="-1"
+            Div.style.cursor= "pointer"
+            Div.style.userSelect = "none"
 
             Img = document.createElement("img")
             Img.src = "FishImages/".concat(FishName).concat(".png")
-            Img.style="object-fit: fill;width:inherit;height:inherit;"
+            Img.style="object-fit: fill;width:inherit;height:inherit;user-select: none"
             
             FishLocation = GetRandLocation()
-            console.log(FishLocation)
-            Div.style.left = "calc(".concat(FishLocation[0]).concat(  " - ".concat((FishSize*15).toString()).concat("px)"))
+            if (FishLocation[2] > 50){
+                Div.style.left = "calc(".concat(FishLocation[0]).concat(  " - ".concat((FishSize*15).toString()).concat("px)"))
+            }else{
+                Div.style.left = FishLocation[0]
+            }
+
+            if (FishLocation[3] > 50){
+                Div.style.top = "calc(".concat(FishLocation[1]).concat(  " - ".concat((FishSize*5).toString()).concat("px)"))
+            }else{
+                Div.style.top = FishLocation[1]
+            }
             //"calc(".concat(FishLocation[0]).concat("-").concat(FishSize*15).concat("px)")
-            Div.style.top = "calc(".concat(FishLocation[1]).concat(  " - ".concat((FishSize*5).toString()).concat("px)"))
+            
 
             Div.style.opacity = "0"
 
@@ -89,31 +118,104 @@
             return d.getTime()
         }
 
-        TweenOpacity = function(Element,Time){
+        TweenOpacity = function(Element,Time,FadeIn,CurrentOpacity){
+          
+            if (CurrentOpacity == null ){
+                CurrentOpacity = parseFloat(Element.style.opacity) 
+            }
+            if (isNaN(CurrentOpacity)) {
+                CurrentOpacity = 1;
+            }
+            if (CurrentOpacity < 1 && FadeIn == true){
+             
+                CurrentOpacity += 1/(Ticks*Time)
+                Element.style.opacity = CurrentOpacity
+                setTimeout(() => TweenOpacity(Element, Time, FadeIn, CurrentOpacity), Time / Ticks);
+            }else if (CurrentOpacity > 0 && !FadeIn) {
+              
+                CurrentOpacity -= 1/(Ticks*Time)
+                Element.style.opacity = CurrentOpacity
+                setTimeout(() => TweenOpacity(Element, Time, FadeIn, CurrentOpacity), Time / Ticks);
+            }
+        }
+
+        RemoveFish = function(Element,Id){
+            Element.remove()
+            Num = GetNumFromId(Id)
+            SpawnedFishes.pop(Num)
+        }
+
+        GetNumFromId = function(Id){
+            for (let Num = 0;Num < SpawnedFishes.length;Num++){
+                if (SpawnedFishes[Num][1] == Id){
+                    return Num
+                }
+            }
+        }
+
+        FishCollected = function(FishName,Element,Id,TiedFunction){
+            if (Locked == true){return null}
             
+            if (TiedFunction != null){
+                TiedFunction()
+            }
+            RemoveFish(Element,Id)
+
+            Fishes[FishNameToFishNum(FishName)][1] += 1
+            Score += Fishes[FishNameToFishNum(FishName)][2]
+           
+
+            CompileFish()
         }
 
         SpawnFish = function(Fish){
+            if (SpawnedFishes.length > MaxFish){return null}
             Fish = FishNameToFish(Fish)
             if (Fish == null){
                 Fish = GetRandomFish()
             }
             let FishSize = Math.trunc((Math.random() * (Fish[4] - Fish[3])) + Fish[3])
             let FishName = Fish[0]
-
+            let TiedFunction = Fish[6]
+            let Id = TotalFish
+            TotalFish += 1
 
             let FishElement = CreateElement(FishName,FishSize)
-            console.log(FishElement)
-            SpawnedFishes.push([FishName,FishElement])
+            SpawnedFishes.push([FishName,Id,FishElement])
 
-            console.log(GetTime())
 
-            TweenOpacity(FishElement,1)
+            if (TiedFunction){
+                FishElement.onclick = function(){
+                    FishCollected(FishName,FishElement,Id,TiedFunction)
+                }
+            }
+            else{
+                FishElement.onclick = function(){
+                    FishCollected(FishName,FishElement,Id)
+                }
+            }
 
+
+            TweenOpacity(FishElement,1,true)
+            
+            setTimeout(() => {
+                console.log(GetNumFromId(Id))
+                if (GetNumFromId(Id) != null){
+                    TweenOpacity(FishElement,1,false)
+                    setTimeout(() => {
+                        if (GetNumFromId(Id) != null){
+                            RemoveFish(FishElement,Id)
+                        }
+                        
+                    }, 1000);
+                }
+            }, 10000);
         }
        
         CompileFish()
-        SpawnFish()
+        setInterval(SpawnFish,500)
+
+        
 
     </script>
 </html>
