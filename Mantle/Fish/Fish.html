@@ -1,0 +1,119 @@
+<html>
+    <body style="background-color: black;" id = "Body">
+        <div style="height: 500px; width: 200px; background-color: black;outline-style: dashed;outline-color: white; position: absolute;bottom: 1;color: white;" id = "FishList">
+            FISH FISH FISH
+        </div>
+        
+    </body>
+    <script>
+        const Ticks = 10
+        let Score = 0
+        FishList = document.getElementById("FishList")
+        Body = document.getElementById("Body")
+        let SpawnedFishes = [
+            //[Name,Element]
+        ]
+        let Fishes = [
+            //["FishName",Amount,Score,MinSize,MaxSize,Weight]
+            ["Fish",0,10,10,20,1],
+            ["Fish2",0,10,10,20,0.1]
+        ]
+        CompileFish = function(){
+            FishList.innerHTML = "Score:".concat(Score.toString()).concat("<br>")
+            for (let Num = 0;Num < Fishes.length;Num++){
+                if (Fishes[Num][1] > 0){
+                    FishList.innerHTML += Fishes[Num][0].concat("|Amount:").concat(Fishes[Num][1].toString())
+                }
+            }
+        }
+
+        GetTotalWeight = function(){
+            let Total = 0
+            for (let Num = 0;Num < Fishes.length;Num++){
+                Total += Fishes[Num][5]
+            }
+            return Total
+        }
+
+        GetRandomFish = function(){
+            let RandNum = Math.random() * GetTotalWeight() * 100
+            let CurrentWeight = 0
+            for (let Num = 0;Num < Fishes.length;Num++){
+                CurrentWeight += Fishes[Num][5] * 100
+                if (RandNum <= CurrentWeight){
+                    return Fishes[Num]
+                }
+            }
+        }
+
+        FishNameToFish = function(Name){
+            Fishes.forEach(Fish => {
+                if (Fish[0] == "Name"){
+                    return Fish
+                }
+            });
+            return null
+        }
+
+        GetRandLocation = function(){
+            return [(Math.trunc(Math.random()* 100)).toString().concat("%"),((Math.trunc(Math.random()* 100)).toString().concat("%"))]
+        }
+
+        CreateElement = function(FishName,FishSize){
+            Div = document.createElement("div")
+            Div.style.height = (5 * FishSize).toString().concat("px")
+            Div.style.width = (15   * FishSize).toString().concat("px")
+            Div.style.position = "absolute"
+            Div.style.backgroundimage = "url(".concat( "FishImages/".concat(FishName)).concat()
+            Div.style.zIndex="-1"
+
+            Img = document.createElement("img")
+            Img.src = "FishImages/".concat(FishName).concat(".png")
+            Img.style="object-fit: fill;width:inherit;height:inherit;"
+            
+            FishLocation = GetRandLocation()
+            console.log(FishLocation)
+            Div.style.left = "calc(".concat(FishLocation[0]).concat(  " - ".concat((FishSize*15).toString()).concat("px)"))
+            //"calc(".concat(FishLocation[0]).concat("-").concat(FishSize*15).concat("px)")
+            Div.style.top = "calc(".concat(FishLocation[1]).concat(  " - ".concat((FishSize*5).toString()).concat("px)"))
+
+            Div.style.opacity = "0"
+
+            Div.append(Img)
+            Body.append(Div)
+            return(Div)
+        }
+
+        GetTime = function(){
+            d = new Date
+            return d.getTime()
+        }
+
+        TweenOpacity = function(Element,Time){
+            
+        }
+
+        SpawnFish = function(Fish){
+            Fish = FishNameToFish(Fish)
+            if (Fish == null){
+                Fish = GetRandomFish()
+            }
+            let FishSize = Math.trunc((Math.random() * (Fish[4] - Fish[3])) + Fish[3])
+            let FishName = Fish[0]
+
+
+            let FishElement = CreateElement(FishName,FishSize)
+            console.log(FishElement)
+            SpawnedFishes.push([FishName,FishElement])
+
+            console.log(GetTime())
+
+            TweenOpacity(FishElement,1)
+
+        }
+       
+        CompileFish()
+        SpawnFish()
+
+    </script>
+</html>
