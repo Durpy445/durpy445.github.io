@@ -7,8 +7,38 @@
         <div style="height: 40px; width: 400px; background-color: black;outline-style: dashed;outline-color: white; position: absolute;bottom: 1;color: white; right: 1;" id = "Output" >
             Output
         </div>
+
+        <div style="height: 64;width: 64;float: right;right: 1; top: 1;; background-color: black;outline-style: dashed;outline-color: white; position: absolute;cursor: pointer;" id = "Audio">
+            <img src="Assets/Mute.png" alt="" id = "Symbol">
+        </div>
         
     </body>
+    <script>
+        //Audio  Module
+        let Muted = true
+        let Trakcs = []
+        let CurrentTrack = ""
+        Toggler = document.getElementById("Audio")
+        Symbol = document.getElementById("Symbol")
+        Toggler.onclick = function(){
+            if (Muted == true){
+                Muted = false
+                Symbol.src = "Assets/Audio.png"
+            }else{
+                Muted = true
+                Symbol.src = "Assets/Mute.png"
+            }
+        }
+
+        MusicOn = function(){
+
+        }
+        MusicOff = function(){
+            
+        }
+
+    </script>
+
     <script>
         let Locked = false
         const Ticks = 100
@@ -28,8 +58,19 @@
         ]
         let Fishes = [
             //["FishName",Amount,Score,MinSize,MaxSize,Weight,TiedFunction]
-            ["Fish",0,10,10,20,1,function(){OutputText("You got a fish",1)}],
-            ["Fish2",0,20,10,20,0.1]
+            ["Fish",0,10,6,8,1],
+            ["Fish2",0,20,4,8,0.3],
+            ["Fish3",0,30,2,6,0.2],
+            ["Fish4",0,40,2,8,0.1],
+            ["Goldfish",0,50,4,7,0.05],
+            ["Skeleton_Fish",0,75,5,9,0.04],
+            ["Evile_Fish",0,75,7,12,0.025],
+            ["Real_Fish",0,100,10,10,0.01],
+            ["Sans_Fish",0,75,5,10,0.01],
+            ["Gold",0,300,4,4,0.005],
+            ["Swimmer",0,1,2,2,0.005],
+            
+            
         ]
         CompileFish = function(){
             FishList.innerHTML = "Score:".concat(Score.toString()).concat("<br>")
@@ -96,7 +137,8 @@
 
             Img = document.createElement("img")
             Img.src = "FishImages/".concat(FishName).concat(".png")
-            Img.style="object-fit: fill;width:inherit;height:inherit;user-select: none"
+            Img.style="object-fit: fill;width:inherit;height:inherit;user-select: none;image-rendering: pixelated; "
+
             
             FishLocation = GetRandLocation()
             if (FishLocation[2] > 50){
@@ -158,6 +200,7 @@
                     return Num
                 }
             }
+            return null
         }
 
         OutputText = function(String,Time){
@@ -241,7 +284,6 @@
             TweenOpacity(FishElement,1,true)
             
             setTimeout(() => {
-                console.log(GetNumFromId(Id))
                 if (GetNumFromId(Id) != null){
                     TweenOpacity(FishElement,1,false)
                     setTimeout(() => {
@@ -255,7 +297,7 @@
         }
        
         CompileFish()
-        setInterval(SpawnFish,500)
+        setInterval(SpawnFish,5000)
 
         
 
