@@ -17,12 +17,18 @@
         let Score = 0
         FishList = document.getElementById("FishList")
         Body = document.getElementById("Body")
+
+        Output = document.getElementById("Output")
+        OutputQueue = []
+        OutputActive = false
+        OutputStartedAt = 0
+
         let SpawnedFishes = [
             //[Name,Id,Element]
         ]
         let Fishes = [
             //["FishName",Amount,Score,MinSize,MaxSize,Weight,TiedFunction]
-            ["Fish",0,10,10,20,1,function(){console.log("A") }],
+            ["Fish",0,10,10,20,1,function(){OutputText("You got a fish",1)}],
             ["Fish2",0,20,10,20,0.1]
         ]
         CompileFish = function(){
@@ -79,6 +85,7 @@
 
         CreateElement = function(FishName,FishSize){
             Div = document.createElement("div")
+
             Div.style.height = (5 * FishSize).toString().concat("px")
             Div.style.width = (15   * FishSize).toString().concat("px")
             Div.style.position = "absolute"
@@ -142,7 +149,7 @@
         RemoveFish = function(Element,Id){
             Element.remove()
             Num = GetNumFromId(Id)
-            SpawnedFishes.pop(Num)
+            SpawnedFishes.splice(Num,1)
         }
 
         GetNumFromId = function(Id){
@@ -151,6 +158,39 @@
                     return Num
                 }
             }
+        }
+
+        OutputText = function(String,Time){
+            console.log(String,Time)
+            OutputQueue.push([String,Time])
+            if (OutputActive == false){
+                OutputStartedAt = GetTime()
+                OutputActive = true
+                Output.innerHTML = String
+                setTimeout(()=>{
+                    OutputQueue.shift()
+                    OutputActive = false
+                },Time * 1000)
+            }else{
+                let TotalTimeTill = 0
+                TotalTimeTill += ((OutputStartedAt + OutputQueue[0][1] * 1000)- GetTime())
+                for (let Num = 1;Num < OutputQueue.length - 1;Num++){
+                    TotalTimeTill += OutputQueue[Num][1] * 1000
+                    console.log("Added")
+                }
+                console.log(OutputQueue)
+                console.log(TotalTimeTill/1000)
+                setTimeout(()=>{
+                    OutputStartedAt = GetTime()
+                    OutputActive = true
+                    Output.innerHTML = String
+                    setTimeout(()=>{
+                        OutputQueue.shift()
+                        OutputActive = false
+                    },Time *1000)
+                },TotalTimeTill)
+            }
+
         }
 
         FishCollected = function(FishName,Element,Id,TiedFunction){
@@ -167,6 +207,8 @@
 
             CompileFish()
         }
+
+        
 
         SpawnFish = function(Fish){
             if (SpawnedFishes.length > MaxFish){return null}
