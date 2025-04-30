@@ -5,7 +5,7 @@
         </div>
 
         <div style="height: 40px; width: 400px; background-color: black;outline-style: dashed;outline-color: white; position: absolute;bottom: 1;color: white; right: 1;" id = "Output" >
-            Output
+            
         </div>
 
         <div style="height: 64;width: 64;float: right;right: 1; top: 1;; background-color: black;outline-style: dashed;outline-color: white; position: absolute;cursor: pointer;" id = "Audio">
@@ -241,11 +241,14 @@
             
             if (TiedFunction != null){
                 TiedFunction()
+            }else{
+                OutputText("Collected:".concat(FishName),0)
             }
             RemoveFish(Element,Id)
 
             Fishes[FishNameToFishNum(FishName)][1] += 1
             Score += Fishes[FishNameToFishNum(FishName)][2]
+           
            
 
             CompileFish()
