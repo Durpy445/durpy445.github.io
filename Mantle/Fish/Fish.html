@@ -10,14 +10,12 @@
 
         <div style="height: 64;width: 64;float: right;right: 1; top: 1;; background-color: black;outline-style: dashed;outline-color: white; position: absolute;cursor: pointer;" id = "Audio">
             <img src="Assets/Mute.png" alt="" id = "Symbol">
-        </div>
+        </div> 
         
     </body>
     <script>
         //Audio  Module
         let Muted = true
-        let Trakcs = []
-        let CurrentTrack = ""
         Toggler = document.getElementById("Audio")
         Symbol = document.getElementById("Symbol")
         Toggler.onclick = function(){
@@ -29,9 +27,22 @@
                 Symbol.src = "Assets/Mute.png"
             }
         }
+        
+        //Module Starts Here
+        let Tracks = []
+        let CurrentTrack = ""
+
+        GetRandomTrack = function(Tracks) {
+            let TrackLen = Tracks.length
+            let RandNum = Math.floor(Math.random() * TrackLen)
+            return Tracks[RandNum]
+        }
 
         MusicOn = function(){
-
+            if(CurrentTrack == null){
+                CurrentTrack = GetRandomTrack(Tracks)
+                
+            }
         }
         MusicOff = function(){
             
@@ -45,6 +56,8 @@
         const MaxFish = 50
         let TotalFish = 0
         let Score = 0
+        let DespawnTime = 20000
+        let SpawnTime = 5000
         FishList = document.getElementById("FishList")
         Body = document.getElementById("Body")
 
@@ -57,18 +70,20 @@
             //[Name,Id,Element]
         ]
         let Fishes = [
-            //["FishName",Amount,Score,MinSize,MaxSize,Weight,TiedFunction]
+            //["FishName",Amount,Score,MinSize,MaxSize,Weight,TiedFunction,XSize,YSize]
             ["Fish",0,10,6,8,1],
             ["Fish2",0,20,4,8,0.3],
             ["Fish3",0,30,2,6,0.2],
             ["Fish4",0,40,2,8,0.1],
             ["Goldfish",0,50,4,7,0.05],
             ["Skeleton_Fish",0,75,5,9,0.04],
+            ["Invisifish",0,50,6,8,0.04],
             ["Evile_Fish",0,75,7,12,0.025],
             ["Real_Fish",0,100,10,10,0.01],
             ["Sans_Fish",0,75,5,10,0.01],
             ["Gold",0,300,4,4,0.005],
             ["Swimmer",0,1,2,2,0.005],
+            ["Lock",0,1,2,2,0.015,function(){Locked = true; OutputText("Locked for 40 seconds",40) ;setTimeout(()=>{Locked = false},40000)},10,10],
             
             
         ]
@@ -124,11 +139,22 @@
             return [(X).toString().concat("%"),((Y).toString().concat("%")),X,Y]
         }
 
-        CreateElement = function(FishName,FishSize){
+        CreateElement = function(Fish,FishSize){
             Div = document.createElement("div")
+            FishName = Fish[0]
 
-            Div.style.height = (5 * FishSize).toString().concat("px")
-            Div.style.width = (15   * FishSize).toString().concat("px")
+            Height = 5 
+            Width = 15 
+
+            if (Fish[8] != null){
+                Height = Fish[8]
+            }
+            if (Fish[7] != null){
+                Width = Fish[7]
+            }
+
+            Div.style.height = (Height * FishSize).toString().concat("px")
+            Div.style.width = (Width  * FishSize).toString().concat("px")
             Div.style.position = "absolute"
             Div.style.backgroundimage = "url(".concat( "FishImages/".concat(FishName)).concat()
             Div.style.zIndex="1"
@@ -268,7 +294,7 @@
             let Id = TotalFish
             TotalFish += 1
 
-            let FishElement = CreateElement(FishName,FishSize)
+            let FishElement = CreateElement(Fish,FishSize)
             SpawnedFishes.push([FishName,Id,FishElement])
 
 
@@ -296,11 +322,11 @@
                         
                     }, 1000);
                 }
-            }, 10000);
+            }, DespawnTime);
         }
        
         CompileFish()
-        setInterval(SpawnFish,5000)
+        setInterval(SpawnFish,SpawnTime)
 
         
 
