@@ -1,0 +1,139 @@
+<html>
+    <body id = "body">
+      <h1 style="text-align: center;text-decoration: underline;">Ent Battle Royale</h1>  
+    </body>
+</html>
+<script>
+    let PixelSize = 5
+    let Height = 100
+    let Width = 100
+    let TPS = 50
+    let Alive = []
+
+    TPS = 1/TPS
+    Create = function(){
+        Body = document.getElementById("body")
+        
+        Div = document.createElement("div")
+        Div.style.height = Height * PixelSize 
+        Div.style.width = Width * PixelSize 
+        Div.style.gridTemplateRows = `repeat(${Height}, ${PixelSize}px)`;
+        Div.style.gridTemplateColumns = `repeat(${Width}, ${PixelSize}px)`;
+        Div.style.backgroundColor = "black"
+        Div.style.display = "grid"
+        Div.style.columnGap = "0px"
+        Div.style.rowGap = "0px"
+        Div.style.outline = "solid"
+        Div.style.outlineWidth= "10px"
+        Div.style.margin = "auto"
+        Div.style.padding = "10px"
+  
+
+        for(let X = 0; X < Width;X++){
+            for(let Y = 0; Y < Height;Y++){
+                Pixel = document.createElement("div")
+                Pixel.style.backgroundColor = "white"
+                Pixel.style.width = `${PixelSize}px`;
+                Pixel.style.height = `${PixelSize}px`;
+                Pixel.id = `${X},${Y}`
+                Div.append(Pixel)
+            }
+        }
+        Body.append(Div)
+    }
+
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
+
+    Start = function(X,Y,Facing,EntColor){
+        Alive.push(EntColor)
+        if (EntColor == null){
+            EntColor = "black"
+        }else{
+            console.log(EntColor)
+        }
+   
+
+        let EntLocation = [X,Y]
+        let intervalId  = setInterval(()=>{
+            
+            EntLocation = [mod(EntLocation[0],Width),mod(EntLocation[1],Height)]
+            let Element = document.getElementById(`${EntLocation[0]},${EntLocation[1]}`)
+            let Color = null
+            if (Element.style.backgroundColor == "white"){4
+                Color = 1
+                Element.style.backgroundColor = EntColor
+            }else{
+                if (Element.style.backgroundColor == EntColor || Alive.includes(Element.style.backgroundColor) == false){
+                    Color = -1
+                    Element.style.backgroundColor = "white"
+                }else{
+                    Body.innerHTML +=  EntColor.concat(" Is Dead<br>")
+                    console.log(Alive)                    
+                    
+                    Alive.splice(Alive.indexOf(EntColor),1)
+                    console.log(Alive)   
+                    Check(EntColor,Element.style.backgroundColor,intervalId)
+                    
+                }
+                
+            }
+
+            Facing = mod(Facing + Color,4)
+
+            if (Facing == 0){
+                EntLocation[1] = EntLocation[1] + 1 
+            }
+            if (Facing == 1){
+                EntLocation[0] = EntLocation[0] + 1 
+            }
+            if (Facing == 2){
+                EntLocation[1] = EntLocation[1] -1 
+            }
+            if (Facing == 3){
+                EntLocation[0] = EntLocation[0] - 1 
+            }
+
+        },TPS * 1000)
+    }
+
+    Check = function(A,B,intervalId){
+        for(let X = 0; X < Width;X++){
+            for(let Y = 0; Y < Height;Y++){
+                let Element = document.getElementById(`${X},${Y}`)
+                if (Element.style.backgroundColor != "white" && Alive.includes(Element.style.backgroundColor) == false){
+                    Element.style.backgroundColor = "black"
+                }
+            }
+        }
+        clearInterval(intervalId)
+    }
+
+    Absorb = function(Killed,By,intervalId){ 
+        for(let X = 0; X < Width;X++){
+            for(let Y = 0; Y < Height;Y++){
+                let Element = document.getElementById(`${X},${Y}`)
+                if (Element.style.backgroundColor == Killed){
+                    Element.style.backgroundColor = By
+                }
+            }
+        }
+        clearInterval(intervalId)
+    }
+
+    Create()
+    function getRandomColor() {
+        var RGBColor1 = (Math.round(Math.random()* 255))
+        var RGBColor2 = (Math.round( Math.random()* 255))
+        var RGBColor3 = (Math.round( Math.random()* 255))
+        return `rgb(${RGBColor1}, ${RGBColor2}, ${RGBColor3})`;
+    }
+    let Amount = 10
+    for( let I = 0; I<Amount;I++){
+        Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
+    }
+    
+ 
+</script>
