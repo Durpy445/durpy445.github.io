@@ -7,8 +7,9 @@
     let PixelSize = 5
     let Height = 100
     let Width = 100
-    let TPS = 50
+    let TPS = Infinity
     let Alive = []
+    let Kills = []
 
     TPS = 1/TPS
     Create = function(){
@@ -49,6 +50,8 @@
 
     Start = function(X,Y,Facing,EntColor){
         Alive.push(EntColor)
+        Kills.push(EntColor)
+        Kills.push(0)
         if (EntColor == null){
             EntColor = "black"
         }else{
@@ -70,7 +73,9 @@
                     Color = -1
                     Element.style.backgroundColor = "white"
                 }else{
-                    Body.innerHTML +=  EntColor.concat(" Is Dead<br>")
+                    KilledBy = Element.style.backgroundColor
+                    Kills[Kills.indexOf(KilledBy) + 1] += 1
+                    Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)
                     console.log(Alive)                    
                     
                     Alive.splice(Alive.indexOf(EntColor),1)
