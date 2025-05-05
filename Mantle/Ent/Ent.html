@@ -65,18 +65,20 @@
     }
 
     OnContact = function(EntColor,Element,IntervalId){
-        if(GameMode == "BattleRoyale"){
+        if (EntColor != "black"){
+            if(GameMode == "BattleRoyale"){
             Kills[Kills.indexOf(KilledBy) + 1] += 1
             Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)               
             Alive.splice(Alive.indexOf(EntColor),1)
             Check(EntColor,Element.style.backgroundColor,IntervalId)
-        }
-        if(GameMode == "Absorb"){
-            Kills[Kills.indexOf(KilledBy) + 1] += 1
-            Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)               
-            Alive.splice(Alive.indexOf(EntColor),1)
-            Absorb(EntColor,Element.style.backgroundColor,IntervalId)
-        }
+            }
+            if(GameMode == "Absorb"){
+                Kills[Kills.indexOf(KilledBy) + 1] += 1
+                Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)               
+                Alive.splice(Alive.indexOf(EntColor),1)
+                Absorb(EntColor,Element.style.backgroundColor,IntervalId)
+            }
+        }    
     }
 
     Start = function(X,Y,Facing,EntColor){
