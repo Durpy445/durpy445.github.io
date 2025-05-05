@@ -1,21 +1,37 @@
 <html>
-    <body id = "body">
+    <body>
       <h1 style="text-align: center;text-decoration: underline;">Ent Battle Royale</h1>  
+      <div style="float: left; position: absolute;">
+            <h2 style="text-decoration: underline;color: blue;cursor: pointer;" id = "Solo">Solo</h2>
+            <h2 style="text-decoration: underline;color: blue;cursor: pointer;" id = "BattleRoyale">BattleRoyale</h2>
+            <h2 style="text-decoration: underline;color: blue;cursor: pointer;" id = "Pacifist">Pacifist</h2>
+            <h2 style="text-decoration: underline;color: blue;cursor: pointer;" id = "Absorb">Absorb</h2>
+      </div>
+      <div id = "body">
+
+      </div>
+     
+    </body>
+    <body>
+        
     </body>
 </html>
 <script>
+    let GameMode = "Absorb"
     let PixelSize = 5
     let Height = 100
     let Width = 100
     let TPS = Infinity
     let Alive = []
     let Kills = []
+    let Intervals = []
 
-    TPS = 1/TPS
+    TPS = Infinity
     Create = function(){
         Body = document.getElementById("body")
         
         Div = document.createElement("div")
+        Div.id = "div"
         Div.style.height = Height * PixelSize 
         Div.style.width = Width * PixelSize 
         Div.style.gridTemplateRows = `repeat(${Height}, ${PixelSize}px)`;
@@ -28,6 +44,7 @@
         Div.style.outlineWidth= "10px"
         Div.style.margin = "auto"
         Div.style.padding = "10px"
+        Div.style.postion = "absolute"
   
 
         for(let X = 0; X < Width;X++){
@@ -47,6 +64,20 @@
         return ((n % m) + m) % m;
     }
 
+    OnContact = function(EntColor,Element,IntervalId){
+        if(GameMode == "BattleRoyale"){
+            Kills[Kills.indexOf(KilledBy) + 1] += 1
+            Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)               
+            Alive.splice(Alive.indexOf(EntColor),1)
+            Check(EntColor,Element.style.backgroundColor,IntervalId)
+        }
+        if(GameMode == "Absorb"){
+            Kills[Kills.indexOf(KilledBy) + 1] += 1
+            Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)               
+            Alive.splice(Alive.indexOf(EntColor),1)
+            Absorb(EntColor,Element.style.backgroundColor,IntervalId)
+        }
+    }
 
     Start = function(X,Y,Facing,EntColor){
         Alive.push(EntColor)
@@ -60,7 +91,8 @@
    
 
         let EntLocation = [X,Y]
-        let intervalId  = setInterval(()=>{
+        let IntervalId  = setInterval(()=>{
+            
             
             EntLocation = [mod(EntLocation[0],Width),mod(EntLocation[1],Height)]
             let Element = document.getElementById(`${EntLocation[0]},${EntLocation[1]}`)
@@ -74,13 +106,10 @@
                     Element.style.backgroundColor = "white"
                 }else{
                     KilledBy = Element.style.backgroundColor
-                    Kills[Kills.indexOf(KilledBy) + 1] += 1
-                    Body.innerHTML +=  EntColor.concat(` was killed by ${Element.style.backgroundColor} [Kills: ${Kills[Kills.indexOf(KilledBy) + 1]}] <br>`)
-                    console.log(Alive)                    
-                    
-                    Alive.splice(Alive.indexOf(EntColor),1)
-                    console.log(Alive)   
-                    Check(EntColor,Element.style.backgroundColor,intervalId)
+                    OnContact(EntColor,Element,IntervalId)
+
+
+ 
                     
                 }
                 
@@ -102,9 +131,10 @@
             }
 
         },TPS * 1000)
+        Intervals.push(IntervalId)
     }
 
-    Check = function(A,B,intervalId){
+    Check = function(A,B,IntervalId){
         for(let X = 0; X < Width;X++){
             for(let Y = 0; Y < Height;Y++){
                 let Element = document.getElementById(`${X},${Y}`)
@@ -113,10 +143,11 @@
                 }
             }
         }
-        clearInterval(intervalId)
+        Intervals.splice(Intervals.indexOf(IntervalId),1)
+        clearInterval(IntervalId)
     }
 
-    Absorb = function(Killed,By,intervalId){ 
+    Absorb = function(Killed,By,IntervalId){ 
         for(let X = 0; X < Width;X++){
             for(let Y = 0; Y < Height;Y++){
                 let Element = document.getElementById(`${X},${Y}`)
@@ -125,20 +156,75 @@
                 }
             }
         }
-        clearInterval(intervalId)
+        Intervals.splice(Intervals.indexOf(IntervalId),1)
+        clearInterval(IntervalId)
+    }
+
+    ClearAll = function(){
+        Intervals.forEach(IntervalId => {
+            clearInterval(IntervalId)
+        });
+        let Div = document.getElementById("div")
+        Div.remove()
+        Body.innerHTML = null
+
+
     }
 
     Create()
+
+
     function getRandomColor() {
         var RGBColor1 = (Math.round(Math.random()* 255))
         var RGBColor2 = (Math.round( Math.random()* 255))
         var RGBColor3 = (Math.round( Math.random()* 255))
         return `rgb(${RGBColor1}, ${RGBColor2}, ${RGBColor3})`;
+        
     }
     let Amount = 10
     for( let I = 0; I<Amount;I++){
         Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
     }
+
+
+    document.getElementById("BattleRoyale").onclick = function(){
+        ClearAll()
+        Create()
+        let Amount = 10
+        GameMode = "BattleRoyale"
+        for( let I = 0; I<Amount;I++){
+            Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
+        }
+    }
+    document.getElementById("Solo").onclick = function(){
+        ClearAll()
+        Create()
+        GameMode = "Solo"
+        Start(Math.floor(Height/2),Math.floor(Width/2),2,"black")      
+    }
+    document.getElementById("Absorb").onclick = function(){
+        ClearAll()
+        Create()
+        let Amount = 10
+        GameMode = "Absorb"
+        for( let I = 0; I<Amount;I++){
+            Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
+        }
+    }
+    document.getElementById("Pacifist").onclick = function(){
+        ClearAll()
+        Create()
+        let Amount = 10
+        GameMode = "Pacifist"
+        for( let I = 0; I<Amount;I++){
+            Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
+        }
+    }
+
+
+
+
+
     
  
 </script>
