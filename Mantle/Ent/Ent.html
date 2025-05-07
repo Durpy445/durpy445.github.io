@@ -27,7 +27,13 @@
     let Intervals = []
 
     TPS = Infinity
-    Create = function(){
+    Create = function(X,Y){
+        if (X != null){
+            Width = X
+        }
+        if (Y != null){
+            Height = Y
+        }
         Body = document.getElementById("body")
         
         Div = document.createElement("div")
@@ -192,7 +198,7 @@
     document.getElementById("BattleRoyale").onclick = function(){
         ClearAll()
         Create()
-        let Amount = 10
+        let Amount = 100
         GameMode = "BattleRoyale"
         for( let I = 0; I<Amount;I++){
             Start(Math.floor(Math.random()*Height),Math.floor(Math.random()*Width),Math.floor(Math.random()*4),getRandomColor())
