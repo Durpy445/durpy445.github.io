@@ -18,8 +18,10 @@
         <img src="Assets/Foward.png" alt="Forward" id="Forward" style="float: right;margin-top: 7%;cursor: pointer;">
 
         <div style="height: 512px; width: 1024px; background-color:rgb(75, 42, 11);position: relative; margin: auto;margin-top: 7%;">
-            <img src="Assets/Frame.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;outline:solid;outline-color: gold;outline-width: 15px;image-rendering: pixelated;"> 
-            <img src="Image2/Boat.png" alt="" style="width: 100%;height:100%;position:  absolute;margin:auto;image-rendering: pixelated;" id = "Picture">
+            <img src="Assets/Frame.png" alt="" style="width: 100%;height: 100%;position: absolute;z-index: 15;opacity: 0.5;outline:solid;outline-color: gold;outline-width: 15px;image-rendering: pixelated;pointer-events: none "> 
+            <a href="" id = "Link">
+                <img src="Image2/Boat.png" alt="" style="width: 100%;height:100%;position:  absolute;margin:auto;image-rendering: pixelated;cursor:default;"  id = "Picture">
+            </a>
         </div>
 
         
@@ -32,7 +34,8 @@
     Forward = document.getElementById("Forward")
     Back = document.getElementById("Back")
     Picture = document.getElementById("Picture")
-    Pictures =  ["Image2/Boat.png","Image2/Cat.png","Image2/City.png","Image2/Connection.png","Image2/Fishing.png","Image2/Floor.png","Image2/Flow.png","Image2/Forgotten.png","Image2/House.png","Image2/Light.png","Image2/Numbers.png","Image2/Office.png","Image2/SmallThings.png","Image2/Starry.png","Image2/Wall.png","Image2/Window.png"] 
+    Pictures =  ["Image2/Boat.png","Image2/Cat.png","Image2/City.png","Image2/Connection.png","Image2/Fishing.png","Image2/Floor.png","Image2/Flow.png","Image2/Forgotten.png","Image2/House.png","Image2/Light.png","Image2/Numbers.png","Image2/Ent.png","Image2/Office.png","Image2/SmallThings.png","Image2/Starry.png","Image2/Wall.png","Image2/Window.png"] 
+    Link = document.getElementById("Link")
     Current = 0
 
 
@@ -43,6 +46,14 @@
         
 
         Data = Pictures[Actual]
+        if(Data == "Image2/Fishing.png"){
+            Link.href = "../../Mantle/Fish/Fish.html"
+        }else if(Data == "Image2/Ent.png"){
+            Link.href = "../../Mantle/Ent/Ent.html"
+        }else{
+            Link.href = ""
+        }
+
         Picture.src = Data 
     }
     Back.onclick = function(){
@@ -50,8 +61,15 @@
         Current += -1
         let Actual = Current % Pictures.length
         console.log(Actual)
-
+        
         Data = Pictures[Actual]
+        if(Data == "Image2/Fishing.png"){
+            Link.href = "../../Mantle/Fish/Fish.html"
+        }else if(Data == "Image2/Ent.png"){
+            Link.href = "../../Mantle/Ent/Ent.html"
+        }else{
+            Link.href = ""
+        }
         Picture.src = Data 
     }
 </script>
