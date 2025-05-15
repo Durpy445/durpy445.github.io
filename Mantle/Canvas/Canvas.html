@@ -1,0 +1,215 @@
+<link rel="stylesheet" href="Canvas.css">
+<html>
+    <body>
+        <canvas style="image-rendering: pixelated;display: block;overflow: hidden;" id = "Canvas">
+
+        </canvas>
+    </body>
+</html>
+
+<script>
+    let map = []
+    let PixelSize = 100
+
+
+    let CurrentColor = "Black"
+    let Width = Math.floor(window.innerWidth / PixelSize)
+    let Height = Math.floor(window.innerHeight / PixelSize)
+
+    canvas = document.getElementById("Canvas")
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    ctx = canvas.getContext("2d")
+    ctx.fillStyle = "Black"
+
+    function getCursorPosition(canvas, event) {
+        let rect = canvas.getBoundingClientRect()
+        let x = event.clientX - rect.left
+        let y = event.clientY - rect.top
+        x = Math.floor(x/PixelSize)*PixelSize
+        y = Math.floor(y/PixelSize)*PixelSize
+
+        return([x,y])
+
+        
+    }
+    
+    CheckLocalCoordinateColor = function(LocalX,localY){
+        let Returned = null
+        map.forEach(pixel => {
+            if(pixel[1][0] == LocalX && pixel[1][1] == localY){
+
+                Returned = pixel[0]
+            }
+        });
+        return Returned
+    }
+    CheckLocalCoordinatePos = function(LocalX,localY){
+        Num = null
+        map.forEach(pixel => {
+            if(pixel[1][0] == LocalX && pixel[1][1] == localY){
+                Num++
+            }
+        });
+        return Num
+    }
+    Clear = function(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+    }
+    ClearMap = function(){
+        map = []
+    }
+
+    InBounds = function(x,y){
+        if(x < 0 && y < 0 && x >= Width && y >= height){
+            return false
+        }else{
+            return true
+        }
+    }
+
+    function mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
+    Ant =  function(){
+        let newMap = []
+        let Check = []
+
+        map.forEach(pixel => {
+            for (let ix = pixel[1][0] - 1; ix <= pixel[1][0] + 1 ; ix++){
+                for (let iy = pixel[1][1] - 1; iy  <= pixel[1][1]+ 1 ; iy++){
+                    NewX = mod(ix,Width)
+                    NewY = mod(iy,Height)
+                    if (!Check.some(coord => coord[0] === NewX && coord[1] === NewY)) {
+                        Check.push([NewX, NewY]);
+                    }
+                    console.log(Check.includes([NewX,NewY]))
+                }
+            }
+        });
+        console.log(Check)
+        Check.forEach(Vector2 => {
+            let x = Vector2[0]
+            let y = Vector2[1]
+                    
+                    let Count = 0
+                    let Real = CheckLocalCoordinateColor(x,y) == "Black"
+
+                    for (let ix = x - 1; ix <= x + 1 ; ix++){
+                        for (let iy = y - 1; iy  <= y+ 1 ; iy++){
+                            if (!(ix === x && iy === y)) {
+                            NewX = mod(ix,Width)
+                            NewY = mod(iy,Height)
+                            if(CheckLocalCoordinateColor(NewX,NewY) == "Black"){        
+                                Count++
+                            }
+                            
+                            
+                        }
+                        }
+                    }
+                    
+
+                    switch(Count){
+                        case 3:
+                        newMap.push(["Black",[x,y]])
+                        break
+                        case 2:
+                        if(Real == true){
+                            newMap.push(["Black",[x,y]])
+                        }
+                        break
+                        default:
+                        
+                    }
+
+                
+            
+        });
+        map = newMap
+        console.log(map)
+    }
+
+    DisplayMap = function(){
+        map.forEach(pixel => {
+            console.log(pixel)
+            ctx.fillStyle = pixel[0]
+            console.log(PixelSize)
+            ctx.fillRect(pixel[1][0] * PixelSize,pixel[1][1] * PixelSize,PixelSize,PixelSize)
+            console.log(pixel[1][0] * PixelSize,pixel[1][1] * PixelSize)
+        });
+        ctx.fillStyle = CurrentColor
+    }
+
+    canvas.addEventListener('mousedown', function(e) {
+        let Vector2 = getCursorPosition(canvas, e)
+        let x = Vector2[0]
+        let y = Vector2[1]
+        let LocalX = x/PixelSize
+        let localY = y/PixelSize
+
+        let Color = CheckLocalCoordinateColor(LocalX,localY) 
+        let Pos =  CheckLocalCoordinatePos(LocalX,localY) 
+        if(Color == null){
+            map.push([CurrentColor,[LocalX,localY]])
+        }else if(Color != CurrentColor){
+            map[Pos][0] = CurrentColor
+        }
+
+        ctx.fillStyle = CurrentColor
+        ctx.fillRect(x,y,PixelSize,PixelSize)
+    })
+
+    window.addEventListener("keydown",(Button) =>{
+        switch(Button.key){
+            case " ": 
+            Clear()
+            ClearMap()
+            break;
+            
+            case "y":
+            CurrentColor = "Yellow"
+            break;
+
+            case "g":
+            CurrentColor = "Green"
+            break;
+            
+            case "c":
+            CurrentColor = "Cyan"
+            break;
+            
+            case "r":
+            CurrentColor = "Red"
+            break;
+            
+            case "m":
+            CurrentColor = "Magenta"
+            break;
+            
+            case "p":
+            CurrentColor = "Purple"
+            break;
+            
+            case "o":
+            CurrentColor = "Orange"
+            break;
+            
+            case "b":
+            CurrentColor = "Black"
+            break;
+
+            case "A":
+                Ant()
+                Clear()
+                DisplayMap()
+            break;
+        default:
+
+        }        
+    })
+    
+</script>
