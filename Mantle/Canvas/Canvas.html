@@ -1,20 +1,21 @@
 <link rel="stylesheet" href="Canvas.css">
 <html>
     <body>
-        <canvas style="image-rendering: pixelated;display: block;overflow: hidden;" id = "Canvas">
+        <canvas style="image-rendering: pixelated;display: block;overflow: hidden;user-select: none;" id = "Canvas">
 
         </canvas>
     </body>
 </html>
 
 <script>
+    document.addEventListener('contextmenu', event => event.preventDefault())
     let map = []
     let PixelSize = 100
 
 
     let CurrentColor = "Black"
-    let Width = Math.floor(window.innerWidth / PixelSize)
-    let Height = Math.floor(window.innerHeight / PixelSize)
+    let Width = Math.round(window.innerWidth / PixelSize) 
+    let Height = Math.round(window.innerHeight / PixelSize) 
 
     canvas = document.getElementById("Canvas")
     canvas.width = window.innerWidth;
@@ -145,22 +146,40 @@
     }
 
     canvas.addEventListener('mousedown', function(e) {
-        let Vector2 = getCursorPosition(canvas, e)
-        let x = Vector2[0]
-        let y = Vector2[1]
-        let LocalX = x/PixelSize
-        let localY = y/PixelSize
+        if (e.buttons == 1){
+            let Vector2 = getCursorPosition(canvas, e)
+            let x = Vector2[0]
+            let y = Vector2[1]
+            let LocalX = x/PixelSize
+            let localY = y/PixelSize
 
-        let Color = CheckLocalCoordinateColor(LocalX,localY) 
-        let Pos =  CheckLocalCoordinatePos(LocalX,localY) 
-        if(Color == null){
-            map.push([CurrentColor,[LocalX,localY]])
-        }else if(Color != CurrentColor){
-            map[Pos][0] = CurrentColor
+            let Color = CheckLocalCoordinateColor(LocalX,localY) 
+            let Pos =  CheckLocalCoordinatePos(LocalX,localY) 
+            if(Color == null){
+                map.push([CurrentColor,[LocalX,localY]])
+            }else if(Color != CurrentColor){
+                map[Pos][0] = CurrentColor
+            }
+
+            ctx.fillStyle = CurrentColor
+            ctx.fillRect(x,y,PixelSize,PixelSize)
         }
+        if (e.buttons == 2){
+            let Vector2 = getCursorPosition(canvas, e)
+            let x = Vector2[0]
+            let y = Vector2[1]
+            let LocalX = x/PixelSize
+            let localY = y/PixelSize
 
-        ctx.fillStyle = CurrentColor
-        ctx.fillRect(x,y,PixelSize,PixelSize)
+            let Color = CheckLocalCoordinateColor(LocalX,localY) 
+            let Pos =  CheckLocalCoordinatePos(LocalX,localY) 
+            if(Color != null){
+                map.pop(CheckLocalCoordinatePos(LocalX,localY))
+            }
+
+            ctx.clearRect(x,y,PixelSize,PixelSize)
+        }
+        
     })
 
     window.addEventListener("keydown",(Button) =>{
