@@ -1,5 +1,8 @@
 <link rel="stylesheet" href="Canvas.css">
 <html>
+    <title>
+        Draw
+    </title>
     <body>
         <canvas style="image-rendering: pixelated;display: block;overflow: hidden;user-select: none;" id = "Canvas">
 
@@ -10,7 +13,7 @@
 <script>
     document.addEventListener('contextmenu', event => event.preventDefault())
     let map = []
-    let PixelSize = 100
+    let PixelSize = 10
 
 
     let CurrentColor = "Black"
@@ -46,15 +49,19 @@
         });
         return Returned
     }
-    CheckLocalCoordinatePos = function(LocalX,localY){
-        Num = null
-        map.forEach(pixel => {
-            if(pixel[1][0] == LocalX && pixel[1][1] == localY){
-                Num++
+    CheckLocalCoordinatePos = function(localX, localY) {
+
+        for (let i = 0; i < map.length; i++) {
+            let pixel = map[i];
+            console.log(pixel)
+            if (pixel[1][0] == localX && pixel[1][1] == localY) {
+                return i;
             }
-        });
-        return Num
-    }
+        }
+        console.log("Returning Null")
+        return null;
+    };
+
     Clear = function(){
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
@@ -71,11 +78,15 @@
         }
     }
 
+    Wrap = function(Vector2){
+        return([mod(Vector2[0],Width),mod(Vector2[1],Height)])
+    }
+
     function mod(n, m) {
         return ((n % m) + m) % m;
     }
 
-    Ant =  function(){
+    Conway =  function(){
         let newMap = []
         let Check = []
 
@@ -87,11 +98,9 @@
                     if (!Check.some(coord => coord[0] === NewX && coord[1] === NewY)) {
                         Check.push([NewX, NewY]);
                     }
-                    console.log(Check.includes([NewX,NewY]))
                 }
             }
         });
-        console.log(Check)
         Check.forEach(Vector2 => {
             let x = Vector2[0]
             let y = Vector2[1]
@@ -131,18 +140,108 @@
             
         });
         map = newMap
-        console.log(map)
+
     }
 
+    const WhiteDirections = {
+        "Lime": [[0,1],"Cyan","Yellow","Green"],
+        "Cyan":[[1,0],"Red","Lime","Blue"],
+        "Red":[[0,-1],"Yellow","Cyan","Maroon"],
+        "Yellow":[[-1,0],"Lime","Red","Gold"],
+    }
+    const BlackDirections = {
+        "Green": [[0,1],"Blue","Gold","Lime"],
+        "Blue":[[1,0],"Maroon","Green","Cyan"],
+        "Maroon":[[0,-1],"Gold","Blue","Red"],
+        "Gold":[[-1,0],"Green","Maroon","Yellow"],
+    }
+
+
+    AddVector2 = function(VectorA,VectorB){
+        return [VectorA[0] + VectorB[0],VectorA[1] + VectorB[1]]
+    }
+
+    Ant = function(){
+        let Ants = []
+        map.forEach(Pixel => {
+            if (WhiteDirections[Pixel[0]]){
+                Ants.push(Pixel)
+            }
+            if (BlackDirections[Pixel[0]]){
+                Ants.push(Pixel)
+            } 
+        });
+
+        
+
+        Ants.forEach(Ent => {
+            let Color = Ent[0]
+            let Black = false
+            let Direction = null
+            if(BlackDirections[Ent[0]]){
+                Black = true
+                Direction = BlackDirections[Color]
+            }else{
+                Direction = WhiteDirections[Color]
+            }
+            Vector2 = AddVector2(Ent[1], Direction[0])
+            Vector2 = Wrap(Vector2)
+            console.log("Z")
+            console.log("Vector2:" , Vector2)
+            let NewColor = null
+            console.log("Loga",CheckLocalCoordinatePos(Vector2[0],Vector2[1]))
+            let Pos = CheckLocalCoordinatePos(Vector2[0],Vector2[1])
+            
+            if(map[Pos] != null && map[Pos][0] == "Black"){
+                if(Black == true){
+                    NewColor = BlackDirections[Color][2]
+                }else{
+                    NewColor = WhiteDirections[WhiteDirections[Color][2]][3]
+                }
+            }else{
+                if(Black == true){
+                    NewColor = BlackDirections[BlackDirections[Color][1]][3]
+                }else{
+                    NewColor = WhiteDirections[Color][1]
+                }
+            }
+
+            map = PaintPixel(Vector2,NewColor)
+            console.log("Z")
+            if(Black == true){
+                console.log()
+                map.splice(CheckLocalCoordinatePos(Ent[1][0],Ent[1][1]),1)
+            }else{
+                console.log("PAINT")
+                map = PaintPixel(Ent[1],"Black")
+            }
+            
+
+        });
+    }
     DisplayMap = function(){
         map.forEach(pixel => {
-            console.log(pixel)
             ctx.fillStyle = pixel[0]
-            console.log(PixelSize)
+
             ctx.fillRect(pixel[1][0] * PixelSize,pixel[1][1] * PixelSize,PixelSize,PixelSize)
-            console.log(pixel[1][0] * PixelSize,pixel[1][1] * PixelSize)
         });
         ctx.fillStyle = CurrentColor
+    }
+
+    PaintPixel = function(Vector2,Color) {
+        let newMap = map
+        let X = Vector2[0]
+        let Y = Vector2[1]
+
+        let Pos = CheckLocalCoordinatePos(X,Y)
+        console.log(Pos)
+        if (Pos == null){
+            newMap.push([Color,[X,Y]])
+        }else{
+            console.log("Else")
+            newMap[Pos][0] = Color
+        }
+        return newMap
     }
 
     canvas.addEventListener('mousedown', function(e) {
@@ -158,6 +257,8 @@
             if(Color == null){
                 map.push([CurrentColor,[LocalX,localY]])
             }else if(Color != CurrentColor){
+                console.log(map)
+                console.log(Pos)
                 map[Pos][0] = CurrentColor
             }
 
@@ -183,6 +284,7 @@
     })
 
     window.addEventListener("keydown",(Button) =>{
+        console.log(Button)
         switch(Button.key){
             case " ": 
             Clear()
@@ -221,10 +323,17 @@
             CurrentColor = "Black"
             break;
 
+            case "C":
+                Conway()
+                Clear()
+                DisplayMap()
+            break;
+
             case "A":
                 Ant()
                 Clear()
                 DisplayMap()
+                
             break;
         default:
 
