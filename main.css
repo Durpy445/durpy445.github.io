@@ -3,6 +3,7 @@
     outline-width: 3px;
     outline-color: white;
     color: white;
+    background-color: black;
     overflow: hidden;
     text-wrap: wrap;
 }
