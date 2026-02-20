@@ -1,0 +1,8 @@
+.box {
+    outline: double;
+    outline-width: 3px;
+    outline-color: white;
+    color: white;
+    overflow: hidden;
+    text-wrap: wrap;
+}
