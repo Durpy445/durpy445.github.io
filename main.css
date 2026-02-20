@@ -7,3 +7,9 @@
     overflow: scroll;
     text-wrap: wrap;
 }
+ul{
+    list-style-type:none;padding: 5px;margin: 0px; margin-left: 5px;color: rgb(255, 0, 93);
+}
+li{
+    color: inherit;
+}
