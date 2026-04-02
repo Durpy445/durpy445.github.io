@@ -1134,6 +1134,8 @@ Canvas.addEventListener("mousedown", function (e) {
   }
 });
 
+
+
 let Info = [
   ["Conways Game Of Life", [["Pixels"], ["Alive Pixel", [150, 150, 150]]]],
   [
@@ -1142,8 +1144,8 @@ let Info = [
       ["Colored Ants"],
       ["North|Colored", [255, 100, 100]],
       ["East|Colored", [100, 255, 100]],
-      ["South|Colored", [100, 100, 225]],
-      ["West|Colored", [200, 100, 100]],
+      ["South|Colored", [100, 100, 255]],
+      ["West|Colored", [255, 100, 100]],
       ["Empty Ants"],
       ["North|Empty", [100, 255, 255]],
       ["East|Empty", [255, 100, 255]],
