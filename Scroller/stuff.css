@@ -1,0 +1,68 @@
+.stuff-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 0;
+    overflow: hidden;
+    user-select: none;
+    width: 100%;
+}
+
+.stuff-container.is-loaded {
+    opacity: 1;
+}
+
+.stuff-row {
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+}
+
+.stuff-track {
+    display: flex;
+    gap: 6px;
+    width: max-content;
+}
+
+.stuff-track img {
+    display: block;
+    image-rendering: pixelated;
+}
+
+.stuff-row#buttons img {
+    height: 41px;
+}
+
+.stuff-row#blinkies img {
+    height: 41px;
+}
+
+.stuff-row:hover .stuff-track {
+    animation-play-state: paused;
+}
+
+
+@keyframes scrollLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollRight {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.scroll-left .stuff-track {
+    animation: scrollLeft var(--scroll-duration, 20s) linear infinite;
+}
+
+.scroll-right .stuff-track {
+    animation: scrollRight var(--scroll-duration, 20s) linear infinite;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .stuff-track {
+        animation: none !important;
+    }
+}
