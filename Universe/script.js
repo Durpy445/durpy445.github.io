@@ -14,6 +14,7 @@ console.log(Size)
 
 Canvas.setAttribute("height",Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
+
 const context = Canvas.getContext('2d');
 
 body.appendChild(Canvas);
