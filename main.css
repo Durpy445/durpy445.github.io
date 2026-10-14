@@ -13,3 +13,7 @@ ul{
 li{
     color: inherit;
 }
+
+::-webkit-scrollbar {
+    display: none;
+}
