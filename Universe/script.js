@@ -58,7 +58,7 @@ function MakePlanet(Name,Mass,Pos,Color,Size,Clockwise,Parent){
 let Mercury = MakePlanet("Mercury",5.5,[57,0],"Cyan",0.5,1,Sun)
 let Venus = MakePlanet("Venus",82,[108,0],"Gold",1,1,Sun)
 let Earth = MakePlanet("Earth",100,[0,0],"Lime",1.5,1,"Universe")
-let Luna = MakePlanet("Luna",5.15,[-15,0],"Gray",0.5,1,Earth)
+let Luna = MakePlanet("Luna",10,[-15,0],"Gray",0.5,1,Earth)
 let Mars = MakePlanet("Mars",50,[227,0],"Orange",1,1,Sun)
 let Jupiter = MakePlanet("Jupiter",30,[300,0],"Sun Yellow",4,1,Sun)
 let Saturn = MakePlanet("Saturn",24,[400,0],"Tan",3,1,Sun)
@@ -109,12 +109,6 @@ function RecursiveOrbit(Planet){
         RecursiveOrbit(Satellite)
     });
 }
-
-function OrbitStep(){
-    undefined
-}
-
-
 
 function Step(){
     Refresh()
