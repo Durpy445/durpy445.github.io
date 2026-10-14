@@ -1,5 +1,9 @@
 let body = document.getElementById("body")
 
+let Remove = document.getElementById("Remove")
+Remove.remove()
+
+
 let Canvas = document.createElement("Canvas")
 const GravitationalConstant = 0.1
 Size = [window.screen.width ,window.screen.height ]
