@@ -3,6 +3,8 @@ let body = document.getElementById("body")
 let Remove = document.getElementById("Remove")
 Remove.remove()
 
+let image =  document.createElement("img")
+image.setAttribute('src', 'https://static.wikia.nocookie.net/touhou/images/e/e1/Yukkuri_MarisaReimu.png/revision/latest/scale-to-width-down/340?cb=20080703235438');
 
 let Canvas = document.createElement("Canvas")
 const GravitationalConstant = 0.1
@@ -61,6 +63,8 @@ let Jupiter = MakePlanet("Jupiter",30,[300,0],"Sun Yellow",4,1,Sun)
 let Saturn = MakePlanet("Saturn",24,[400,0],"Tan",3,1,Sun)
 let Uranus = MakePlanet("Uranus",12.5,[500,0],"Turquoise",2,1,Sun)
 let Neptune = MakePlanet("Neptune",9,[600,0],"Blue",2,1,Sun)
+let Pluto = MakePlanet("Neptune",9,[1000,0],"Cyan",0.4,1,Sun)
+let Me = MakePlanet("Weaver",9,[3000,0],"White",5,1,Sun)
 
 Earth.Satellites.push(Sun)
 
@@ -70,6 +74,11 @@ function DrawPlanet(WorkingPos,Planet){
     context.beginPath();
     context.arc(GlobalPosition[0], GlobalPosition[1], Planet.Size * 5, 0, 2 * Math.PI);
     context.stroke();
+
+    if(Planet.Name == "Weaver"){
+        context.drawImage(image, GlobalPosition[0]-50, GlobalPosition[1]-50)
+    }
+
     return GlobalPosition
 }
 
@@ -116,7 +125,7 @@ function Step(){
     });
 }
 
-setInterval(Step,25)
+setInterval(Step,15)
 
 let div = document.createElement("div")
 body.appendChild(div);
