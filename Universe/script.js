@@ -9,7 +9,6 @@ image.setAttribute('src', 'https://static.wikia.nocookie.net/touhou/images/e/e1/
 let Canvas = document.createElement("Canvas")
 const GravitationalConstant = 0.1
 Size = [window.screen.width ,window.screen.height ]
-console.log(Size)
 
 
 Canvas.setAttribute("height",Size[1].toString().concat("px"));
@@ -34,7 +33,8 @@ Sun = {
     "Color" : "yellow",
     "Size" : 5,
     "Clockwise": 1,
-    "Satellites" : []
+    "Satellites" : [],
+    "Redirect" : null
 }
 let Universe = [Sun]
 function MakePlanet(Name,Mass,Pos,Color,Size,Clockwise,Parent){
@@ -45,7 +45,9 @@ function MakePlanet(Name,Mass,Pos,Color,Size,Clockwise,Parent){
     "Color" : Color,
     "Size" : Size,
     "Clockwise": Clockwise,
-    "Satellites" : []}
+    "Satellites" : [],
+    "Redirect" : "",
+}
     if (Parent == "Universe"){
         Universe.push(Planet)
     }else{
@@ -70,6 +72,7 @@ let Me = MakePlanet("Weaver",9,[3000,0],"White",5,1,Sun)
 Earth.Satellites.push(Sun)
 
 function DrawPlanet(WorkingPos,Planet){
+  
     let GlobalPosition = AddVector2(WorkingPos,Planet.Position)
     context.strokeStyle = Planet.Color
     context.beginPath();
@@ -120,8 +123,42 @@ function Step(){
     });
 }
 
-setInterval(Step,15)
+function InPlanet(CheckingPosition,GlobalPosition,Planet){
+    let Distance = Math.hypot(GlobalPosition[0] - CheckingPosition[0],GlobalPosition[1] - CheckingPosition[1])
+    let TrueSize = Planet.Size * 5
+    if (Distance < TrueSize){
+        return Planet
+    }else if(Planet.Satellites.length > 0){
+        Planet.Satellites.forEach(Satellite => {
+           
+            let Result = InPlanet(CheckingPosition,AddVector2(GlobalPosition,Satellite.Position),Satellite)
+            if (Result != false){
+                return Result
+            }
+        });
+    }
+    return false
+}
 
+
+Sun.Redirect = "Planets/Sun/Sun.html"
+
+addEventListener("click",function(e){
+    let  cursorX = e.pageX - Size[0]/2;
+    let  cursorY = e.pageY - Size[1]/2;
+    
+    Universe.forEach(Planet => {
+        let Found = InPlanet([cursorX,cursorY],Planet.Position,Planet)
+        if (Found.Redirect){
+            
+            window.location.href = Found.Redirect
+        }
+
+    });
+    
+})
+
+setInterval(Step,15)
 let div = document.createElement("div")
 body.appendChild(div);
 div.style.height= "20px"
