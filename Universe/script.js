@@ -142,6 +142,7 @@ function InPlanet(CheckingPosition,GlobalPosition,Planet){
 
 
 Sun.Redirect = "Planets/Sun/Sun.html"
+Earth.Redirect = "Planets/Earth/Earth.html"
 
 addEventListener("click",function(e){
     let  cursorX = e.pageX - Size[0]/2;
