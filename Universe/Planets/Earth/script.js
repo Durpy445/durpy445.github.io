@@ -11,30 +11,20 @@ let Dimension = []
 let Stack = []
 let ToAddToStack
 let FullPop = 1000
+let People = []
 Canvas.setAttribute("height", Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
 const context = Canvas.getContext('2d');
 
 const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], ["Red", "Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"],["Blue"],["Purple"]]
-const ColorToURL = {
-    "Green": "https://img.magnific.com/free-vector/seamless-green-grass-pattern_1284-52275.jpg?semt=ais_hybrid&w=740&q=80",
-    "Yellow": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdlmm5kJ_3vgYkzjArmNdjnxgjr1nipJaTgRKb5EUUbafY3s8eqJBqf3g&s=10",
-    "White": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXcQZ2BiQoWrcNUV7XZ4uRscB49XdE3DozMOdz4tVvYpPkJ47YIzBHGc7U&s=10",
-    "Orange": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjPb0UfRwjtO8EbQekVOd3IN47a741L70L0RDmhJIs4Z-XhbzFw5j4VCE&s=10",
-    "Blue":"https://img.magnific.com/premium-photo/photo-seamless-texture-calm-ocean-water_950361-43063.jpg?semt=ais_hybrid&w=740&q=80",
-    "Gold":"https://cdn.architextures.org/textures/26/2/creative-oak-4152-staggered-barham--sons-g93oor.jpg",
-    "Lime":"https://www.sketchuptextureclub.com/public/texture_m/157-green-grass-pbr-texture-seamless.jpg",
-    "Gray": "https://cdn.architextures.org/textures/25/9/acquerrllo--3ez14u.jpg",
-    "Red": "https://cdn.architextures.org/textures/23/4/rusted-iron-none-v2oxec-1200.jpg?w=400&h=320&q=60&f=webp",
-    "Pink": "https://cdn.architextures.org/textures/21/07/loop-pile-carpet-60e33325b66d8-1200.jpg?w=400&h=320&q=60&f=webp",
-    "Purple": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Minecraft_missing_texture_block.svg/3840px-Minecraft_missing_texture_block.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
-}
+const ColorToURL = {}
 
 body.appendChild(Canvas);
 
 function Refresh() {
     context.clearRect(0, 0, Canvas.width, Canvas.height);
     Dimension = []
+    People = []
 }
 function AddVector2(VectorA, VectorB) {
     return [VectorA[0] + VectorB[0], VectorA[1] + VectorB[1]]
@@ -44,13 +34,13 @@ function SubVector2(VectorA, VectorB) {
 }
 function DrawRectangle(VectorA, VectorB) {
     let Difference = SubVector2(VectorB, VectorA)
-    context.fillRect(VectorA[0], VectorA[1], Difference[0], Difference[1])
+    context.rect(VectorA[0], VectorA[1], Difference[0], Difference[1])
     context.stroke()
 }
 function DrawLocation(Location) {
 
     context.beginPath();
-    context.fillStyle = Location.Color
+    context.strokeStyle = Location.Color
     Dimension.push(Location)
     DrawRectangle(Location.Bounds[0], Location.Bounds[1])
     if (Location.Image) {
@@ -86,6 +76,43 @@ function MakeLocation(CornerOne, CornerTwo, Color) {
     }
     return Location
 }
+
+function MakePerson(Position,Direction){
+    let Person = {
+        "Position" : Position,
+        "Direction" : Direction
+    }
+    return Person
+}
+
+function InBounds(Vector2){
+    return (Vector2[0] > 0 && Vector2[0] < Size[0] && Vector2[1] > 0 && Vector2[1] < Size[1] )
+}
+
+function MovePeople(){
+    People.forEach(Person => {
+        let Mult = 5
+        let VectorAngle = [Math.cos(Person.Direction) * Mult ,Math.sin(Person.Direction) * Mult]
+        let NewPos = AddVector2(Person.Position,VectorAngle)
+        console.log(InBounds(NewPos))
+        if(InBounds(NewPos) == false){
+            console.log("A")
+            Person.Direction += Math.PI * Math.random() * 2
+        }else{
+            Person.Position = NewPos
+        }
+    });
+}
+
+function DrawPeople(){
+    context.clearRect(0, 0, Canvas.width, Canvas.height);
+    People.forEach(Person => {
+        context.beginPath();
+        context.arc(Person.Position[0], Person.Position[1], 20, 0, 2 * Math.PI);
+        context.stroke();
+    });
+}
+
 
 function Overlapping(BoundsA, BoundsB) {
     let l1 = BoundsA[0];
@@ -191,7 +218,15 @@ function MoveDimension(Location) {
     Location.Inside.forEach(LittleGuys => {
         DrawLocation(LittleGuys)
     });
+
+    if (Location.Inside.length == 0){
+        context.strokeStyle = Location.Color
+        for (let index = 0; index < Location.Population; index++) {
+            People.push(MakePerson([Math.random()*Size[0],Math.random()*Size[1]],Math.random()*Math.PI*2))
+        }
+    }
 }
+
 
 
 addEventListener("click", function (e) {
@@ -212,7 +247,6 @@ addEventListener("click", function (e) {
     let Smallest = [0, 99999 * 99999]
     console.log(Found)
     Found.forEach(Place => {
-
         let BoundsA = Place.Bounds[0]
         let BoundsB = Place.Bounds[1]
         let Width = BoundsA[0] - BoundsB[0]
@@ -241,7 +275,7 @@ let Mid = [Size[0] / 2, Size[1] / 2]
 
 
 let Earth = MakeLocation(SubVector2(Mid, SquareBounds), AddVector2(Mid, SquareBounds), "Blue")
-Populate(Earth, 5000, 0)
+Populate(Earth, 500, 0)
 Stack = []
 
 Refresh()
@@ -267,3 +301,13 @@ document.body.addEventListener("mousedown", event => {
         }
     }
 });
+
+function Step(){
+    if(People.length){
+        MovePeople()
+        DrawPeople()
+    }
+    
+}
+
+setInterval(Step,15)
