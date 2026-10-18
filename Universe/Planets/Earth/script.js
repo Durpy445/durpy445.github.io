@@ -16,7 +16,7 @@ Canvas.setAttribute("height", Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
 const context = Canvas.getContext('2d');
 
-const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], ["Red", "Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"],["Blue"],["Purple"]]
+const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], [ "Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"],["Blue"],["Purple"]]
 const ColorToURL = {}
 
 body.appendChild(Canvas);
@@ -94,9 +94,9 @@ function MovePeople(){
         let Mult = 5
         let VectorAngle = [Math.cos(Person.Direction) * Mult ,Math.sin(Person.Direction) * Mult]
         let NewPos = AddVector2(Person.Position,VectorAngle)
-        console.log(InBounds(NewPos))
+    
         if(InBounds(NewPos) == false){
-            console.log("A")
+    
             Person.Direction += Math.PI * Math.random() * 2
         }else{
             Person.Position = NewPos
@@ -113,6 +113,18 @@ function DrawPeople(){
     });
 }
 
+function IsPerson(Position){
+    let Found 
+    People.forEach(Person => {
+        let PersonPos = Person.Position
+        let Distance = Math.hypot(Position[0] - PersonPos[0],Position[1] - PersonPos[1])
+        console.log(Distance)
+        if(Distance <= 20){
+            Found = Person
+        }
+    });
+    return Found
+}
 
 function Overlapping(BoundsA, BoundsB) {
     let l1 = BoundsA[0];
@@ -208,7 +220,6 @@ function Populate(Parent, PopToAdd, Depth) {
 
 function MoveDimension(Location) {
     Refresh()
-    console.log(Location)
     document.body.style.backgroundColor = Location.Color
     if (ColorToURL[Location.Color]){
         let ImgURL = ColorToURL[Location.Color]
@@ -245,7 +256,7 @@ addEventListener("click", function (e) {
     });
 
     let Smallest = [0, 99999 * 99999]
-    console.log(Found)
+
     Found.forEach(Place => {
         let BoundsA = Place.Bounds[0]
         let BoundsB = Place.Bounds[1]
@@ -264,6 +275,27 @@ addEventListener("click", function (e) {
 
 
         MoveDimension(Smallest[0])
+    }
+
+    let PersonFound = IsPerson([cursorX,cursorY])
+    console.log(PersonFound)
+    if (PersonFound){
+        for (let index = 0; index < People.length; index++) {
+            if ( PersonFound == People[index]){
+                People.splice(index,1)
+                Stack.forEach(Location => {
+                    Location.Population -= 1
+                    if (Location.Population == 0n){
+                        Location.Color = "Red"
+                    }
+                });
+                if (People.length == 0){
+                    Refresh()
+                    
+                }
+            }
+            
+        }
     }
 
 })
@@ -304,7 +336,7 @@ document.body.addEventListener("mousedown", event => {
 
 function Step(){
     if(People.length){
-        MovePeople()
+        //MovePeople()
         DrawPeople()
     }
     
