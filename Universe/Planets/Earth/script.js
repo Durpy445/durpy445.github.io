@@ -120,7 +120,7 @@ function IsPerson(Position){
         let PersonPos = Person.Position
         let Distance = Math.hypot(Position[0] - PersonPos[0],Position[1] - PersonPos[1])
         console.log(Distance)
-        if(Distance <= 20){
+        if(Distance <= 30){
             Found = Person
         }
     });
