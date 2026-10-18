@@ -12,6 +12,7 @@ let Stack = []
 let ToAddToStack
 let FullPop = 1000
 let People = []
+let Kills = 0
 Canvas.setAttribute("height", Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
 const context = Canvas.getContext('2d');
@@ -285,7 +286,8 @@ addEventListener("click", function (e) {
                 People.splice(index,1)
                 Stack.forEach(Location => {
                     Location.Population -= 1
-                    if (Location.Population == 0n){
+                    Kills += 1
+                    if (Location.Population == 0){
                         Location.Color = "Red"
                     }
                 });
@@ -336,7 +338,10 @@ document.body.addEventListener("mousedown", event => {
 
 function Step(){
     if(People.length){
-        //MovePeople()
+        if (Kills > 0){
+            MovePeople()    
+        }
+        
         DrawPeople()
     }
     
