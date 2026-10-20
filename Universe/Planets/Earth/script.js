@@ -17,7 +17,7 @@ Canvas.setAttribute("height", Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
 const context = Canvas.getContext('2d');
 
-const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], [ "Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"],["Blue"],["Purple"]]
+const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], ["Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"], ["Blue"], ["Purple"]]
 const ColorToURL = {}
 
 body.appendChild(Canvas);
@@ -27,6 +27,11 @@ function Refresh() {
     Dimension = []
     People = []
 }
+
+let TitleImg = document.createElement("img")
+TitleImg.setAttribute('src', 'TitleScreen.gif');
+
+
 function AddVector2(VectorA, VectorB) {
     return [VectorA[0] + VectorB[0], VectorA[1] + VectorB[1]]
 }
@@ -51,9 +56,9 @@ function DrawLocation(Location) {
         let Width = Math.abs(Location.Bounds[0][0] - Location.Bounds[1][0])
         let Height = Math.abs(Location.Bounds[0][1] - Location.Bounds[1][1])
 
-        context.drawImage(Img, Location.Bounds[0][0],Location.Bounds[0][1],Width,Height)
+        context.drawImage(Img, Location.Bounds[0][0], Location.Bounds[0][1], Width, Height)
 
-    }else  if (ColorToURL[Location.Color]){
+    } else if (ColorToURL[Location.Color]) {
         let ImgURL = ColorToURL[Location.Color]
 
         let Img = document.createElement("img")
@@ -62,9 +67,9 @@ function DrawLocation(Location) {
         let Width = Math.abs(Location.Bounds[0][0] - Location.Bounds[1][0])
         let Height = Math.abs(Location.Bounds[0][1] - Location.Bounds[1][1])
 
-        context.drawImage(Img, Location.Bounds[0][0],Location.Bounds[0][1],Width,Height)
+        context.drawImage(Img, Location.Bounds[0][0], Location.Bounds[0][1], Width, Height)
 
-    } 
+    }
 }
 
 function MakeLocation(CornerOne, CornerTwo, Color) {
@@ -78,34 +83,34 @@ function MakeLocation(CornerOne, CornerTwo, Color) {
     return Location
 }
 
-function MakePerson(Position,Direction){
+function MakePerson(Position, Direction) {
     let Person = {
-        "Position" : Position,
-        "Direction" : Direction
+        "Position": Position,
+        "Direction": Direction
     }
     return Person
 }
 
-function InBounds(Vector2){
-    return (Vector2[0] > 0 && Vector2[0] < Size[0] && Vector2[1] > 0 && Vector2[1] < Size[1] )
+function InBounds(Vector2) {
+    return (Vector2[0] > 0 && Vector2[0] < Size[0] && Vector2[1] > 0 && Vector2[1] < Size[1])
 }
 
-function MovePeople(){
+function MovePeople() {
     People.forEach(Person => {
         let Mult = 5
-        let VectorAngle = [Math.cos(Person.Direction) * Mult ,Math.sin(Person.Direction) * Mult]
-        let NewPos = AddVector2(Person.Position,VectorAngle)
-    
-        if(InBounds(NewPos) == false){
-    
+        let VectorAngle = [Math.cos(Person.Direction) * Mult, Math.sin(Person.Direction) * Mult]
+        let NewPos = AddVector2(Person.Position, VectorAngle)
+
+        if (InBounds(NewPos) == false) {
+
             Person.Direction += Math.PI * Math.random() * 2
-        }else{
+        } else {
             Person.Position = NewPos
         }
     });
 }
 
-function DrawPeople(){
+function DrawPeople() {
     context.clearRect(0, 0, Canvas.width, Canvas.height);
     People.forEach(Person => {
         context.beginPath();
@@ -114,13 +119,13 @@ function DrawPeople(){
     });
 }
 
-function IsPerson(Position){
-    let Found 
+function IsPerson(Position) {
+    let Found
     People.forEach(Person => {
         let PersonPos = Person.Position
-        let Distance = Math.hypot(Position[0] - PersonPos[0],Position[1] - PersonPos[1])
+        let Distance = Math.hypot(Position[0] - PersonPos[0], Position[1] - PersonPos[1])
         console.log(Distance)
-        if(Distance <= 30){
+        if (Distance <= 30) {
             Found = Person
         }
     });
@@ -222,19 +227,19 @@ function Populate(Parent, PopToAdd, Depth) {
 function MoveDimension(Location) {
     Refresh()
     document.body.style.backgroundColor = Location.Color
-    if (ColorToURL[Location.Color]){
+    if (ColorToURL[Location.Color]) {
         let ImgURL = ColorToURL[Location.Color]
-        document.body.style.backgroundImage = "Url(".concat( ImgURL).concat(")")
+        document.body.style.backgroundImage = "Url(".concat(ImgURL).concat(")")
     }
-    
+
     Location.Inside.forEach(LittleGuys => {
         DrawLocation(LittleGuys)
     });
 
-    if (Location.Inside.length == 0){
+    if (Location.Inside.length == 0) {
         context.strokeStyle = Location.Color
         for (let index = 0; index < Location.Population; index++) {
-            People.push(MakePerson([Math.random()*Size[0],Math.random()*Size[1]],Math.random()*Math.PI*2))
+            People.push(MakePerson([Math.random() * Size[0], Math.random() * Size[1]], Math.random() * Math.PI * 2))
         }
     }
 }
@@ -278,25 +283,25 @@ addEventListener("click", function (e) {
         MoveDimension(Smallest[0])
     }
 
-    let PersonFound = IsPerson([cursorX,cursorY])
+    let PersonFound = IsPerson([cursorX, cursorY])
     console.log(PersonFound)
-    if (PersonFound){
+    if (PersonFound) {
         for (let index = 0; index < People.length; index++) {
-            if ( PersonFound == People[index]){
-                People.splice(index,1)
+            if (PersonFound == People[index]) {
+                People.splice(index, 1)
                 Stack.forEach(Location => {
                     Location.Population -= 1
                     Kills += 1
-                    if (Location.Population == 0){
+                    if (Location.Population == 0) {
                         Location.Color = "Red"
                     }
                 });
-                if (People.length == 0){
+                if (People.length == 0) {
                     Refresh()
-                    
+
                 }
             }
-            
+
         }
     }
 
@@ -336,15 +341,28 @@ document.body.addEventListener("mousedown", event => {
     }
 });
 
-function Step(){
-    if(People.length){
-        if (Kills > 0){
-            MovePeople()    
+
+let TitleScreen = false
+
+function Step() {
+    if (Kills > 0) {
+        if (TitleScreen == false) {
+            TitleScreen = true
+            body.appendChild(TitleImg);
+            TitleImg.style.color = "White"
+            TitleImg.style.position = "absolute"
+            TitleImg.style.top = (0).toString().concat("px")
+            TitleImg.style.left = (Size[0] / 2 - 292).toString().concat("px")
         }
-        
+    }
+
+    if (People.length) {
+        if (Kills > 0) {
+            MovePeople()
+        }
         DrawPeople()
     }
-    
+
 }
 
-setInterval(Step,15)
+setInterval(Step, 15)
