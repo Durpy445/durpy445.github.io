@@ -15,6 +15,10 @@ let People = []
 let Kills = 0
 Canvas.setAttribute("height", Size[1].toString().concat("px"));
 Canvas.setAttribute("width", Size[0].toString().concat("px"));
+
+let EarthPng = document.createElement("img")
+EarthPng.setAttribute('src', 'Earth.jpg');
+
 const context = Canvas.getContext('2d');
 
 const DepthColours = [["Green", "Yellow", "White", "Orange"], ["Gold", "Gray", "Lime"], ["Orange", "Orange", "Gray", "White"], ["White", "Gray", "Blue", "Pink", "Blue"], ["Orange"], ["Yellow"], ["Pink"], ["Blue"], ["Purple"]]
@@ -50,26 +54,16 @@ function DrawLocation(Location) {
     Dimension.push(Location)
     DrawRectangle(Location.Bounds[0], Location.Bounds[1])
     if (Location.Image) {
-        let Img = document.createElement("img")
-        Img.setAttribute('src', Location.Image);
+
+        
+        let Img = Location.Image
 
         let Width = Math.abs(Location.Bounds[0][0] - Location.Bounds[1][0])
         let Height = Math.abs(Location.Bounds[0][1] - Location.Bounds[1][1])
 
         context.drawImage(Img, Location.Bounds[0][0], Location.Bounds[0][1], Width, Height)
 
-    } else if (ColorToURL[Location.Color]) {
-        let ImgURL = ColorToURL[Location.Color]
-
-        let Img = document.createElement("img")
-        Img.setAttribute('src', ImgURL);
-
-        let Width = Math.abs(Location.Bounds[0][0] - Location.Bounds[1][0])
-        let Height = Math.abs(Location.Bounds[0][1] - Location.Bounds[1][1])
-
-        context.drawImage(Img, Location.Bounds[0][0], Location.Bounds[0][1], Width, Height)
-
-    }
+    } 
 }
 
 function MakeLocation(CornerOne, CornerTwo, Color) {
@@ -124,7 +118,6 @@ function IsPerson(Position) {
     People.forEach(Person => {
         let PersonPos = Person.Position
         let Distance = Math.hypot(Position[0] - PersonPos[0], Position[1] - PersonPos[1])
-        console.log(Distance)
         if (Distance <= 30) {
             Found = Person
         }
@@ -284,7 +277,6 @@ addEventListener("click", function (e) {
     }
 
     let PersonFound = IsPerson([cursorX, cursorY])
-    console.log(PersonFound)
     if (PersonFound) {
         for (let index = 0; index < People.length; index++) {
             if (PersonFound == People[index]) {
@@ -314,13 +306,20 @@ let Mid = [Size[0] / 2, Size[1] / 2]
 
 
 let Earth = MakeLocation(SubVector2(Mid, SquareBounds), AddVector2(Mid, SquareBounds), "Blue")
+Earth.Image = EarthPng
 Populate(Earth, 500, 0)
 Stack = []
 
 Refresh()
 
-Earth.Image = "https://upload.wikimedia.org/wikipedia/commons/7/7b/Earth_Western_Hemisphere.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
+
+
+
+
+
+
 DrawLocation(Earth)
+
 
 
 document.addEventListener('contextmenu', event => event.preventDefault());
